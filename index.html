@@ -13,12 +13,12 @@
 
     <!-- ドラッグ＆ドロップエリア -->
     <div id="dropZone" style="border: 2px dashed #aaa; padding: 20px; text-align: center;">
-      ファイルをここにドラッグ＆ドロップ、または
+      動画ファイル（制限：2GB以下）をここにドラッグ＆ドロップ、<br>または
       <input type="file" id="fileInput" accept="video/*" hidden>
       <button onclick="document.getElementById('fileInput').click();">ファイルを選択</button>
     </div>
 
-    <p id="state">ファイルを選択すると自動的に計測を開始します。</p>
+    <p id="state">プログラムの準備中</p>
 
     <p>ラウドネス：<span id="loudness">0.0</span> LUFS、ピーク値：<span id="peak_db">0.0</span> dB</p>
 
@@ -38,7 +38,7 @@
             動画ファイルのラウドネス値とデシベルレベルのピーク値を表示します。<br>
           </p>
           </p>
-          <p>このWebアプリのソースコードは<a target="_blank" href="https://github.com/SoundAdjuster/MovieSoundAnalizer">GitHub</a>で公開されています。</p>
+          <p>このWebアプリのソースコードは<a target="_blank" href="https://github.com/SoundAdjuster/MovieSoundAnalyzer">GitHub</a>で公開されています。</p>
           <h2>利用規約</h2>
           <p>
             簡易的なテストは行っておりますが、誤った値が表示される可能性はあります。<br>

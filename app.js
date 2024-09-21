@@ -9,8 +9,17 @@ let loudnessEle = document.getElementById('loudness');
 let peak_dbEle = document.getElementById('peak_db');
 let stateEle = document.getElementById('state');
 
-async function analyzeLoudness(event) {
+// ffmpegのインスタンスをロードする関数
+async function loadFFmpeg() {
+    if (ffmpeg === null) {
+        ffmpeg = new FFmpeg();
+        await ffmpeg.load({
+            coreURL: "/MovieSoundAnalyzer/assets/core/package/dist/umd/ffmpeg-core.js",
+        });
+    }
+}
 
+async function analyzeLoudness(event) {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -19,15 +28,15 @@ async function analyzeLoudness(event) {
 
     // ffmpegのインスタンスがまだロードされていない場合にのみロードする
     if (ffmpeg === null) {
-        ffmpeg = new FFmpeg()
-        await ffmpeg.load({
-            coreURL: "/MovieSoundAnalyzer/assets/core/package/dist/umd/ffmpeg-core.js",
-        });
+        await loadFFmpeg();
     }
 
     const name = file.name;
 
-    try {
+    let integratedLoudness = 0.0;
+    let peakLevel_dB = 0.0;
+
+    // try {
         console.log(`"${name}"を処理中...`);
         stateEle.innerText = "計測中…少し時間がかかります。"
 
@@ -56,15 +65,15 @@ async function analyzeLoudness(event) {
         console.log(loudnessData);
 
         [integratedLoudness, peakLevel_dB] = parseLoudnessSummary(loudnessData);
-        loudnessEle.innerText = integratedLoudness;
-        peak_dbEle.innerText = peakLevel_dB;
         stateEle.innerText = "計測が完了しました。"
 
-    } catch (error) {
-        alert(`${name}の処理中にエラーが発生しました。`);
-        console.error(error);
-        stateEle.innerText = "エラーが発生しました。その動画ファイルは分析できません。"
-    }
+    // } catch (error) {
+    //     console.error(error);
+    //     stateEle.innerText = "計測中にエラーが発生しました。"
+    // }
+
+    loudnessEle.innerText = integratedLoudness;
+    peak_dbEle.innerText = peakLevel_dB;
 }
 
 function parseLoudnessSummary(logData) {
@@ -83,3 +92,12 @@ function parseLoudnessSummary(logData) {
         peakLevel_dB
     ];
 }
+
+async function init() {
+    if (ffmpeg === null) {
+        await loadFFmpeg();
+    }
+    stateEle.innerText = "ファイルを選択すると自動的に計測を開始します。"
+}
+
+init();
