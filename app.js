@@ -21,7 +21,7 @@ async function analyzeLoudness(event) {
     if (ffmpeg === null) {
         ffmpeg = new FFmpeg()
         await ffmpeg.load({
-            coreURL: "/assets/core/package/dist/umd/ffmpeg-core.js",
+            coreURL: "/MovieSoundAnalyzer/assets/core/package/dist/umd/ffmpeg-core.js",
         });
     }
 
