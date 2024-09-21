@@ -1,5 +1,5 @@
 html, body {
-  margin: 0;
+  margin: 10px;
   width: 100%;
   height: 100%
 }
@@ -9,17 +9,16 @@ body {
   align-items: center;
 }
 
-/* body {
-  font-family: 'Arial', sans-serif;
-  margin: 20px;
-  text-align: center;
-} */
+h1{
+  padding-top: 0;
+  margin-top: 0;
+}
 
 #dropZone {
   border: 2px dashed #aaa;
   padding: 20px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   cursor: pointer;
   border-radius: 10px;
 }
@@ -28,73 +27,59 @@ body {
   background-color: #f8f8f8;
 }
 
-#fileList {
-  text-align: left;
-  display: inline-block;
-  margin-bottom: 20px;
+p{
+  margin: 6px;
 }
 
-#loudnessControl {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 20px;
+video{
+  padding: 18px;
+  width: 640px;
 }
 
-#loudnessControl button, #processBtn {
-  background-color: #3b92ef;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 0px 2px;
-  transition-duration: 0.4s;
+/* style.css */
+#terms-link-container {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+#terms-link-container:hover{
   cursor: pointer;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  color: blue;
+  text-decoration-line: underline;
 }
 
-#loudnessControl button:hover, #processBtn:hover {
-  background-color: #3f7fc4;
-  color: white;
+#terms-popup {
+  display: none; /* 初期状態では非表示 */
+  position: fixed;
+  z-index: 1; /* コンテンツより前面に */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* スクロール可能に */
+  background-color: rgb(0,0,0); /* 背景色 */
+  background-color: rgba(0,0,0,0.4); /* 透明度 */
 }
 
-#loudnessControl input {
-  font-size: 16px;
-  padding: 10px;
-  width: 100px;
-  text-align: center;
-  margin: 4px 2px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.1);
+.popup-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 1000px;
 }
 
-#loudnessControl input:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0,123,255,.25);
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 
-/* ダークモード対応スタイル */
-/* @media (prefers-color-scheme: dark) {
-  body {
-    background-color: #333;
-    color: #ccc;
-  }
-
-  #dropZone {
-    border: 2px dashed #777;
-    background-color: #444;
-    color: #bbb;
-  }
-
-  #loudnessControl button,
-  #processBtn {
-    background-color: #555;
-    color: #ddd;
-    border: 1px solid #666;
-  }
-} */
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

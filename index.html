@@ -1,114 +1,71 @@
 <html>
   <head>
-    <title>Sound Adjuster</title>
+    <title>Movie Sound Analyzer</title>
     <meta charset="UTF-8">
+    <meta name="description" content="動画の音声のラウドネス値とピークレベルを計測します。">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
     <link rel="stylesheet" href="style.css">
     <script src="/assets/ffmpeg/package/dist/umd/ffmpeg.js"></script>
     <script src="/assets/util/package/dist/umd/index.js"></script>
   </head>
   <body>
-    <h1>Sound Adjuster</h1>
+    <h1>Movie Sound Analyzer</h1>
 
     <!-- ドラッグ＆ドロップエリア -->
     <div id="dropZone" style="border: 2px dashed #aaa; padding: 20px; text-align: center;">
       ファイルをここにドラッグ＆ドロップ、または
-      <input type="file" id="fileInput" accept=".mp3, .wav, .aac, .m4a, .flac, .ogg" multiple hidden>
+      <input type="file" id="fileInput" accept="video/*" hidden>
       <button onclick="document.getElementById('fileInput').click();">ファイルを選択</button>
     </div>
 
-    <!-- 選択されたファイルのリストを表示するエリア -->
-    <div id="fileList"></div>
+    <p id="state">ファイルを選択すると自動的に計測を開始します。</p>
 
-    <!-- ラウドネス値の入力: 大きな増減ボタンを提供する -->
-    <div id="loudnessControl">
-      <button onclick="changeLoudness(-0.1)">-</button>
-      <input type="number" id="loudnessInput" value="-31.5" min="-50" max="0" step="0.1">
-      <button onclick="changeLoudness(0.1)">+</button>
+    <p>ラウドネス：<span id="loudness">0.0</span> LUFS、ピーク値：<span id="peak_db">0.0</span> dB</p>
+
+    <video id="video" controls></video>
+
+    <!-- リンク -->
+    <div id="terms-link-container">
+      <a id="terms-link">説明・利用規約</a>
     </div>
 
-    <button id="processBtn">処理開始</button>
+    <!-- ポップアップ内容 -->
+    <div id="terms-popup">
+      <div class="popup-content">
+          <span class="close">&times;</span>
+          <h2>説明</h2>
+          <p>
+            動画ファイルのラウドネス値とデシベルレベルのピーク値を表示します。<br>
+          </p>
+          </p>
+          <p>このWebアプリのソースコードは<a target="_blank" href="https://github.com/SoundAdjuster/MovieSoundAnalizer">GitHub</a>で公開されています。</p>
+          <h2>利用規約</h2>
+          <p>
+            簡易的なテストは行っておりますが、誤った値が表示される可能性はあります。<br>
+            音声品質に対する評価は最終的に自身で行うようお願いいたします。<br>
+            また、開発者から当ウェブアプリの利用に関して損害などを補償することは一切ございません。
+          </p>
+      </div>
+    </div>
+
 
     <script>
-    // ラウドネス値の増減を行う関数
-    function changeLoudness(change) {
-      var loudnessInput = document.getElementById('loudnessInput');
-      var currentVal = parseFloat(loudnessInput.value);
-      var newVal = currentVal + change;
-
-      // 最小値と最大値の範囲内に新しい値を制限する
-      if (newVal >= parseFloat(loudnessInput.min) && newVal <= parseFloat(loudnessInput.max)) {
-          loudnessInput.value = newVal.toFixed(1); // 値を0.1単位で固定
+      // 利用規約の挙動に関するscript
+      document.getElementById('terms-link').onclick = function() {
+          document.getElementById('terms-popup').style.display = 'block';
       }
-    }
-    </script>
 
+      document.getElementsByClassName('close')[0].onclick = function() {
+          document.getElementById('terms-popup').style.display = 'none';
+      }
 
-    <script>
-   // ファイルの状態を保持するための配列
-    let fileArray = [];
+      window.onclick = function(event) {
+          if (event.target == document.getElementById('terms-popup')) {
+              document.getElementById('terms-popup').style.display = 'none';
+          }
+      }
+      </script>
 
-    // ドラッグ＆ドロップイベントの設定
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('fileInput');
-    const fileListContainer = document.getElementById('fileList');
-
-    // ファイルが選択されたときにリストを更新する
-    fileInput.addEventListener('change', (e) => {
-        addFiles(e.target.files);
-        updateFileList();
-    });
-
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.style.background = '#e1e7ec';
-    });
-
-    dropZone.addEventListener('dragleave', (e) => {
-        e.preventDefault();
-        dropZone.style.background = '';
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.style.background = '';
-        addFiles(e.dataTransfer.files);
-        updateFileList();
-    });
-
-    // 新しいファイルを既存の配列に追加する関数
-    function addFiles(newFiles) {
-        for (const file of newFiles) {
-            let uniqueName = file.name;
-            let duplicateCount = 1; // 重複があった場合にカウントを増やす
-
-            // 既存のファイルと名前が重複しているか確認
-            while (fileArray.some(f => f.name === uniqueName)) {
-                const extensionIndex = file.name.lastIndexOf('.');
-                const namePart = file.name.slice(0, extensionIndex);
-                const extensionPart = file.name.slice(extensionIndex);
-                uniqueName = `${namePart}(${duplicateCount++})${extensionPart}`;
-            }
-
-            // ユニークな名前でファイルオブジェクトを配列に追加
-            const fileWithUniqueName = new File([file], uniqueName, { type: file.type });
-            fileArray.push(fileWithUniqueName);
-        }
-    }
-
-    // 選択されたファイルのリストをUIに表示する関数
-    function updateFileList() {
-        fileListContainer.innerHTML = '';
-        const list = document.createElement('ul');
-
-        for (const file of fileArray) {
-            const listItem = document.createElement('li');
-            listItem.textContent = file.name;
-            list.appendChild(listItem);
-        }
-
-        fileListContainer.appendChild(list);
-    }
-    </script>
     <script src="app.js"></script>
   </body>
 </html>

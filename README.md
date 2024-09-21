@@ -1,11 +1,12 @@
-アップロードされた音声ファイルに対してラウドネスノーマライズ（人の感覚に近い音量の均一化）をするウェブアプリです。
+動画の音声のラウドネス値とピークレベルを計測するウェブアプリです。
 
 以下のURLよりご利用ください。
 
-https://soundadjuster.github.io/
+https://soundadjuster.github.io/MovieSoundAnalyzer/
 
-技術的にはFFmpeg Wasmを使用しています。
+技術的には<a href="https://github.com/ffmpegwasm/ffmpeg.wasm">ffmpeg.wasm</a>によりブラウザ上でFFmpegを実行し、計測を行っています。
+ログの全文はJavaScriptコンソールに出力されているため、確認する必要があれば参照してください。
 
-https://github.com/ffmpegwasm/ffmpeg.wasm
-
-そのため、ラウドネスノーマライズの精度はFFmpegに依存します。
+簡易的なテストは行っておりますが、誤った値が表示される可能性はあります。
+音声品質に対する評価は最終的に自身で行うようお願いいたします。
+また、開発者から当ウェブアプリの利用に関して損害などを補償することは一切ございません。
