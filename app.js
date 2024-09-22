@@ -32,11 +32,12 @@ async function analyzeLoudness(event) {
     }
 
     const name = file.name;
+    const MAX_SIZE = 2 * 1024 * 1024 * 1024; // 2GB in bytes
 
     let integratedLoudness = 0.0;
     let peakLevel_dB = 0.0;
 
-    // try {
+    try {
         console.log(`"${name}"を処理中...`);
         stateEle.innerText = "計測中…少し時間がかかります。"
 
@@ -67,10 +68,14 @@ async function analyzeLoudness(event) {
         [integratedLoudness, peakLevel_dB] = parseLoudnessSummary(loudnessData);
         stateEle.innerText = "計測が完了しました。"
 
-    // } catch (error) {
-    //     console.error(error);
-    //     stateEle.innerText = "計測中にエラーが発生しました。"
-    // }
+    } catch (error) {
+        console.error(error);
+        if (file.size >= MAX_SIZE) {
+            stateEle.innerText = "エラー：ファイルサイズが2GBを超えています。";
+        } else {
+            stateEle.innerText = "計測中にエラーが発生しました。"
+        }
+    }
 
     loudnessEle.innerText = integratedLoudness;
     peak_dbEle.innerText = peakLevel_dB;
