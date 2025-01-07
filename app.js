@@ -66,7 +66,7 @@ async function analyzeLoudness(event) {
         console.log(loudnessData);
 
         [integratedLoudness, peakLevel_dB] = parseLoudnessSummary(loudnessData);
-        stateEle.innerText = "計測が完了しました。"
+        stateEle.innerText = `「${name}」の計測が完了しました。`
 
     } catch (error) {
         console.error(error);

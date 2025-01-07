@@ -27,6 +27,10 @@ h1{
   background-color: #f8f8f8;
 }
 
+.input-wrapper {
+  margin-top: 13px;
+}
+
 p{
   margin: 6px;
 }

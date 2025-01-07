@@ -2,7 +2,7 @@
   <head>
     <title>Movie Sound Analyzer</title>
     <meta charset="UTF-8">
-    <meta name="description" content="動画の音声のラウドネス値とピークレベルを計測します。">
+    <meta name="description" content="動画および音声ファイルのラウドネス値とピークレベルを計測します。">
     <link rel="icon" href="/favicon.ico" sizes="32x32">
     <link rel="stylesheet" href="style.css">
     <script src="/MovieSoundAnalyzer/assets/ffmpeg/package/dist/umd/ffmpeg.js"></script>
@@ -13,9 +13,13 @@
 
     <!-- ドラッグ＆ドロップエリア -->
     <div id="dropZone" style="border: 2px dashed #aaa; padding: 20px; text-align: center;">
-      動画ファイル（制限：2GB以下）をここにドラッグ＆ドロップ、<br>または
-      <input type="file" id="fileInput" accept="video/*,audio/*" hidden>
-      <button onclick="document.getElementById('fileInput').click();">ファイルを選択</button>
+      音声ファイルもしくは動画ファイル（制限：2GB以下）を<br>
+      ここにドラッグ＆ドロップ、
+      <div class="input-wrapper">
+        または
+        <input type="file" id="fileInput" accept="video/*,audio/*" hidden>
+        <button onclick="document.getElementById('fileInput').click();">ファイルを選択</button>
+      </div>
     </div>
 
     <p id="state">プログラムの準備中</p>
