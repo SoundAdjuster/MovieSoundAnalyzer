@@ -74,6 +74,7 @@ async function analyzeLoudness(event) {
             stateEle.innerText = "エラー：ファイルサイズが2GBを超えています。";
         } else {
             stateEle.innerText = "計測中にエラーが発生しました。"
+            console.error(error);
         }
     }
 
