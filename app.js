@@ -2,12 +2,23 @@ const { fetchFile } = FFmpegUtil;
 const { FFmpeg } = FFmpegWASM;
 let ffmpeg = null;
 
-document.getElementById('fileInput').addEventListener('change', analyzeLoudness, false);
-
 let videoEle = document.getElementById('video');
 let loudnessEle = document.getElementById('loudness');
 let peak_dbEle = document.getElementById('peak_db');
 let stateEle = document.getElementById('state');
+
+document.getElementById('fileInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+        setVideoSrc(file);
+        analyzeLoudness(file);
+    }
+}, false);
+
+function setVideoSrc(file) {
+    const url = URL.createObjectURL(file);
+    videoEle.src = url;
+}
 
 // ffmpegのインスタンスをロードする関数
 async function loadFFmpeg() {
@@ -19,13 +30,7 @@ async function loadFFmpeg() {
     }
 }
 
-async function analyzeLoudness(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const url = URL.createObjectURL(file);
-    videoEle.src = url;
-
+async function analyzeLoudness(file) {
     // ffmpegのインスタンスがまだロードされていない場合にのみロードする
     if (ffmpeg === null) {
         await loadFFmpeg();

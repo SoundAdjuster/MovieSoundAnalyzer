@@ -52,6 +52,34 @@
       </div>
     </div>
 
+    <script>
+    // ドラッグ＆ドロップイベントの設定
+    const dropZone = document.getElementById('dropZone');
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.background = '#e1e7ec';
+    });
+
+    dropZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dropZone.style.background = '';
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.background = '';
+
+        const files = e.dataTransfer.files;
+        if (files.length === 0) return; // ファイルがない場合は即時リターン
+
+        const file = files[0];
+        if (file) {
+            setVideoSrc(file);
+            analyzeLoudness(file);
+        }
+    });
+    </script>
 
     <script>
       // 利用規約の挙動に関するscript
